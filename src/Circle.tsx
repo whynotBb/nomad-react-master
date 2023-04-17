@@ -1,4 +1,5 @@
 import styled from "styled-components";
+<<<<<<< HEAD
 
 interface ContainerProps {
   bgColor: string;
@@ -27,4 +28,11 @@ function Circle({ bgColor, borderColor, text = "default text" }: CircleProps) {
   );
 }
 //props default 값 주기 2가지 위 참고
+=======
+const Container = styled.div``;
+
+function Circle() {
+  return <Container />;
+}
+>>>>>>> 2642d964883888017a1456ac6cd1a013ce0b68d2
 export default Circle;
