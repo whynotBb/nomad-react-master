@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -32,6 +34,10 @@ const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
 `;
 
+const Loader = styled.span`
+  text-align: center;
+  display: block;
+`;
 const coins = [
   {
     id: "btc-bitcoin",
@@ -62,17 +68,44 @@ const coins = [
   },
 ];
 
+interface CoinIntsterface {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  is_new: boolean;
+  is_active: boolean;
+  type: string;
+}
 function Coins() {
+  const [coins, setCoins] = useState<CoinIntsterface[]>([]);
+  const [loading, setLoding] = useState(true);
+  useEffect(() => {
+    (async () => {
+      const reponse = await fetch("https://api.coinpaprika.com/v1/coins");
+      const json = await reponse.json();
+      setCoins(json.slice(0, 100));
+      setLoding(false);
+    })();
+  }, []);
+  console.log(coins);
+
   return (
     <Container>
       <Header>
         <Title>Coin</Title>
+      </Header>
+      {loading ? (
+        <Loader>Loading...</Loader>
+      ) : (
         <CoinsList>
           {coins.map((coin) => (
-            <Coin key={coin.id}>{coin.name}</Coin>
+            <Coin key={coin.id}>
+              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+            </Coin>
           ))}
         </CoinsList>
-      </Header>
+      )}
     </Container>
   );
 }
