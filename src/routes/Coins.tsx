@@ -21,6 +21,8 @@ const Coin = styled.li`
     padding: 20px;
     transition: color 0.2s ease-in;
     display: block;
+    display: flex;
+    align-items: center;
   }
   &:hover {
     a {
@@ -68,6 +70,11 @@ const coins = [
   },
 ];
 
+const Img = styled.img`
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
+`;
 interface CoinIntsterface {
   id: string;
   name: string;
@@ -101,7 +108,19 @@ function Coins() {
         <CoinsList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+              <Link
+                to={{
+                  pathname: `/${coin.id}`,
+                  state: { name: coin.name },
+                  // 상태도 보내기
+                }}
+              >
+                <Img
+                  src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                  alt=""
+                />
+                {coin.name} &rarr;
+              </Link>
             </Coin>
           ))}
         </CoinsList>
