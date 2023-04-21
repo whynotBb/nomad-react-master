@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -22,14 +22,19 @@ const Title = styled.h1`
 interface RouteParams {
   coinId: string;
 }
+interface RouteState {
+  name: string;
+}
 function Coin() {
   const { coinId } = useParams<RouteParams>();
   const [loading, setLoding] = useState(true);
+  const { state } = useLocation<RouteState>();
+  // Link 로 보내준 데이터 정보를 useLocation 을 통해 확인
 
   return (
     <Container>
       <Header>
-        <Title>Coin</Title>
+        <Title>{state?.name || "loading..."}</Title>
       </Header>
       {loading ? <Loader>Loading...</Loader> : null}
     </Container>

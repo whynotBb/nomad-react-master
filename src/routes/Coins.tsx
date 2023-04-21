@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 const Container = styled.div`
   padding: 0px 20px;
+  max-width: 400px;
+  margin: 0 auto;
 `;
 const Header = styled.div`
   height: 15vh;
@@ -112,7 +114,7 @@ function Coins() {
                 to={{
                   pathname: `/${coin.id}`,
                   state: { name: coin.name },
-                  // 상태도 보내기
+                  // 비하인드 더 씬 데이터 보내기
                 }}
               >
                 <Img
