@@ -77,7 +77,7 @@ const Img = styled.img`
   height: 35px;
   margin-right: 10px;
 `;
-interface CoinIntsterface {
+interface CoinInterface {
   id: string;
   name: string;
   symbol: string;
@@ -87,7 +87,7 @@ interface CoinIntsterface {
   type: string;
 }
 function Coins() {
-  const [coins, setCoins] = useState<CoinIntsterface[]>([]);
+  const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoding] = useState(true);
   useEffect(() => {
     (async () => {
