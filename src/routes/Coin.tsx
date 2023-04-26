@@ -1,8 +1,19 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router";
+import {
+  Route,
+  Switch,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from "react-router";
 import styled from "styled-components";
+import Chart from "./Chart";
+import Price from "./Price";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
+  max-width: 500px;
+  margin: 0 auto;
   padding: 0px 20px;
 `;
 const Header = styled.div`
@@ -79,13 +90,61 @@ interface PriceData {
     };
   };
 }
+
+const Overview = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 10px;
+`;
+const OverviewItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  span:first-child {
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+`;
+const Description = styled.p`
+  margin: 20px 0px;
+`;
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 25px 0px;
+  gap: 10px;
+`;
+
+const Tab = styled.span<{ isActive: boolean }>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px 0px;
+  border-radius: 10px;
+  color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
+  a {
+    display: block;
+  }
+`;
+
 function Coin() {
   const { coinId } = useParams<RouteParams>();
-  const [loading, setLoding] = useState(true);
+  const [loading, setLoading] = useState(true);
   const { state } = useLocation<RouteState>();
   const [info, setInfo] = useState<InfoData>();
   const [priceInfo, setPriceInfo] = useState<PriceData>();
-  // Link 로 보내준 데이터 정보를 useLocation 을 통해 확인
+  const priceMatch = useRouteMatch("/:coinId/price");
+  const chartMatch = useRouteMatch("/:coinId/chart");
+
+  // ㄴ url 에 ('')안의 값이 있는지 확인해줘
+  //-> 있으면, object를 통해 > isExact > t / f  // Link 로 보내준 데이터 정보를 useLocation 을 통해 확인해 주고 url 도 확인
   useEffect(() => {
     (async () => {
       const infoData = await (
@@ -97,16 +156,65 @@ function Coin() {
       console.log(priceData);
       setInfo(infoData);
       setPriceInfo(priceData);
-      setLoding(false);
+      setLoading(false);
     })();
   }, [coinId]);
   return (
     <Container>
       <Header>
-        <Title>{state?.name || "loading..."}</Title>
+        <Title>
+          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+        </Title>
         {/* state가 존재하면 name 을 가져오고 없으면 loading */}
       </Header>
-      {loading ? <Loader>Loading...</Loader> : null}
+      {loading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Overview>
+            <OverviewItem>
+              <span>Rank:</span>
+              <span>{info?.rank}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Symbol:</span>
+              <span>${info?.symbol}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Open Source:</span>
+              <span>{info?.open_source ? "Yes" : "No"}</span>
+            </OverviewItem>
+          </Overview>
+          <Description>{info?.description}</Description>
+          <Overview>
+            <OverviewItem>
+              <span>Total Supply:</span>
+              <span>{priceInfo?.total_supply}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Max Supply:</span>
+              <span>{priceInfo?.max_supply}</span>
+            </OverviewItem>
+          </Overview>
+          <Tabs>
+            <Tab isActive={chartMatch !== null}>
+              <Link to={`/${coinId}/Chart`}>Chart</Link>
+            </Tab>
+            <Tab isActive={priceMatch !== null}>
+              <Link to={`/${coinId}/Price`}>Price</Link>
+            </Tab>
+          </Tabs>
+          <Switch>
+            <Route path={`/:coinId/chart`}>
+              {/* == path={`/${coinId}/chart`} */}
+              <Chart />
+            </Route>
+            <Route path={`/:coinId/price`}>
+              <Price />
+            </Route>
+          </Switch>
+        </>
+      )}
     </Container>
   );
 }
