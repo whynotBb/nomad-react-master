@@ -88,13 +88,13 @@ interface CoinInterface {
 }
 function Coins() {
   const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoding] = useState(true);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
-      const reponse = await fetch("https://api.coinpaprika.com/v1/coins");
-      const json = await reponse.json();
+      const response = await fetch("https://api.coinpaprika.com/v1/coins");
+      const json = await response.json();
       setCoins(json.slice(0, 100));
-      setLoding(false);
+      setLoading(false);
     })();
   }, []);
   console.log(coins);
