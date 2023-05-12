@@ -47,6 +47,47 @@ function Chart({ coinId }: chartProps) {
       ) : (
         <>
           <ApexChart
+            type="candlestick"
+            series={[
+              {
+                data: formattedData,
+              },
+            ]}
+            height={350}
+            options={{
+              chart: {
+                height: 300,
+                width: 500,
+                toolbar: {
+                  show: false,
+                },
+                background: "transparent",
+              },
+              grid: { show: false },
+              theme: {
+                mode: "dark",
+              },
+              yaxis: {
+                show: false,
+              },
+              xaxis: {
+                categories: data?.map((price) =>
+                  new Date(price.time_close * 1000).toUTCString()
+                ),
+                type: "datetime",
+                axisBorder: {
+                  show: false,
+                },
+                axisTicks: {
+                  show: false,
+                },
+                labels: {
+                  show: false,
+                },
+              },
+            }}
+          />
+          <ApexChart
             type="line"
             series={[
               {
@@ -100,48 +141,6 @@ function Chart({ coinId }: chartProps) {
               tooltip: {
                 y: {
                   formatter: (value) => `$ ${value.toFixed(2)}`,
-                },
-              },
-            }}
-          />
-
-          <ApexChart
-            type="candlestick"
-            series={[
-              {
-                data: formattedData,
-              },
-            ]}
-            height={350}
-            options={{
-              chart: {
-                height: 300,
-                width: 500,
-                toolbar: {
-                  show: false,
-                },
-                background: "transparent",
-              },
-              grid: { show: false },
-              theme: {
-                mode: "dark",
-              },
-              yaxis: {
-                show: false,
-              },
-              xaxis: {
-                categories: data?.map((price) =>
-                  new Date(price.time_close * 1000).toUTCString()
-                ),
-                type: "datetime",
-                axisBorder: {
-                  show: false,
-                },
-                axisTicks: {
-                  show: false,
-                },
-                labels: {
-                  show: false,
                 },
               },
             }}
