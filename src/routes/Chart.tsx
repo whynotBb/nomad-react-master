@@ -11,6 +11,10 @@ interface IHistorical {
   volume: string;
   market_cap: number;
 }
+interface IFormattedHistorical {
+  x: Date;
+  y: number[];
+}
 interface chartProps {
   coinId: string;
 }
@@ -22,7 +26,19 @@ function Chart({ coinId }: chartProps) {
       refetchInterval: 10000,
     }
   );
-  // console.log(data?.map((price) => Number(price.close)) as number[]);
+
+  const formattedData: IFormattedHistorical[] =
+    data?.map((d: IHistorical) => ({
+      x: new Date(d.time_close * 1000),
+      y: [
+        parseFloat(d.open),
+        parseFloat(d.high),
+        parseFloat(d.low),
+        parseFloat(d.close),
+      ],
+    })) || [];
+
+  console.log("formattedData", formattedData);
 
   return (
     <div>
@@ -93,16 +109,7 @@ function Chart({ coinId }: chartProps) {
             type="candlestick"
             series={[
               {
-                data: [
-                  // {
-                  //   x: new Date(1538778600000),
-                  //   y: [6629.81, 6650.5, 6623.04, 6633.33],
-                  // },
-                  // {
-                  //   x: new Date(1538780400000),
-                  //   y: [6632.01, 6643.59, 6620, 6630.11],
-                  // },
-                ],
+                data: formattedData,
               },
             ]}
             height={350}

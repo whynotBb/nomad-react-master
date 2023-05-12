@@ -12,7 +12,7 @@ import Price from "./Price";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const Container = styled.div`
   max-width: 500px;
@@ -166,6 +166,8 @@ function Coin() {
       refetchInterval: 10000,
     }
   );
+  console.log(tickersData);
+
   const loading = infoLoading || tickersLoading;
   return (
     <Container>

@@ -51,3 +51,29 @@ https://coinicons-api.vercel.app/
 npm install --save react-apexcharts apexcharts
 npm i react-helmet
 npm i --save-dev @types/react-helmet
+React Helmet
+npm i react-helmet
+npm i --save-dev @types/react-helmet
+https://www.npmjs.com/package/react-helmet
+
+- Warning: Using UNSAFE_componentWillMount in strict mode is not recommended and may indicate bugs in your code.
+  React Helmet사용시 콘솔창에 위와 같은 경고창이 뜨시는 분들은 React Helmet 대신 React Helmet Async를 사용하시면 됩니다.
+  npm i react-helmet-async
+
+```
+// App.tsx (1. HelmetProvider를 가져와서 Router위에 감싸줍니다.)
+import { HelmetProvider } from "react-helmet-async";
+
+< HelmetProvider >
+< Router />
+< / HelmetProvider >
+
+// Chart.tsx (2. Helmet컴포넌트 안에 title을 전달합니다.)
+import { Helmet } from "react-helmet-async";
+
+< Helmet >
+< title >Chart< / title >
+< / Helmet >
+```
+
+https://www.npmjs.com/package/react-helmet-async
