@@ -47,3 +47,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 coin icon img
 https://coinicons-api.vercel.app/
+
+npm install --save react-apexcharts apexcharts
+npm i react-helmet
+npm i --save-dev @types/react-helmet

@@ -12,6 +12,7 @@ import Price from "./Price";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   max-width: 500px;
@@ -136,6 +137,16 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
+const Btn = styled.span`
+  display: block;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  a {
+    font-size: 13px;
+  }
+`;
+
 function Coin() {
   const { coinId } = useParams<RouteParams>();
   const { state } = useLocation<RouteState>();
@@ -150,29 +161,23 @@ function Coin() {
   );
   const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
     ["tickers", "coinId"],
-    () => fetchCoinTickers(coinId)
+    () => fetchCoinTickers(coinId),
+    {
+      refetchInterval: 10000,
+    }
   );
-
-  // ㄴ url 에 ('')안의 값이 있는지 확인해줘
-  //-> 있으면, object를 통해 > isExact > t / f  // Link 로 보내준 데이터 정보를 useLocation 을 통해 확인해 주고 url 도 확인
-  // useEffect(() => {
-  //   (async () => {
-  //     const infoData = await (
-  //       await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-  //     ).json();
-  //     const priceData = await (
-  //       await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-  //     ).json();
-  //     console.log(priceData);
-  //     setInfo(infoData);
-  //     setPriceInfo(priceData);
-  //     setLoading(false);
-  //   })();
-  // }, [coinId]);
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
+        <Btn>
+          <Link to="/">&lt; HOME</Link>
+        </Btn>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
@@ -192,8 +197,8 @@ function Coin() {
               <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{infoData?.open_source ? "Yes" : "No"}</span>
+              <span>Price:</span>
+              <span>${tickersData?.quotes.USD.price.toFixed(2)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>
@@ -218,7 +223,7 @@ function Coin() {
           <Switch>
             <Route path={`/:coinId/chart`}>
               {/* == path={`/${coinId}/chart`} */}
-              <Chart />
+              <Chart coinId={coinId} />
             </Route>
             <Route path={`/:coinId/price`}>
               <Price />
