@@ -7,12 +7,14 @@ import { DefaultTheme } from "styled-components";
 // };
 
 export const DarkTheme: DefaultTheme = {
-  bgColor: "#2d3436",
-  textColor: "#dfe6e9",
+  bgColor: "#2f3640",
+  textColor: "#f2f2f2",
   accentColor: "#00b894",
+  cardBgColor: "#232323",
 };
 export const LightTheme: DefaultTheme = {
   bgColor: "#f2f2f2",
-  textColor: "#dfe6e9",
+  textColor: "#222",
   accentColor: "#00b894",
+  cardBgColor: "white",
 };
