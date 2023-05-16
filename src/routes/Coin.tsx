@@ -146,11 +146,9 @@ const Btn = styled.span`
     font-size: 13px;
   }
 `;
-interface ICoinProps {
-  isDark: boolean;
-}
+interface ICoinProps {}
 
-function Coin({ isDark }: ICoinProps) {
+function Coin({}: ICoinProps) {
   const { coinId } = useParams<RouteParams>();
   const { state } = useLocation<RouteState>();
   // const [loading, setLoading] = useState(true);
@@ -228,7 +226,7 @@ function Coin({ isDark }: ICoinProps) {
           <Switch>
             <Route path={`/:coinId/chart`}>
               {/* == path={`/${coinId}/chart`} */}
-              <Chart isDark={isDark} coinId={coinId} />
+              <Chart coinId={coinId} />
             </Route>
             <Route path={`/:coinId/price`}>
               <Price coinId={coinId} />
